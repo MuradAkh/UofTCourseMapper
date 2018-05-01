@@ -85,6 +85,21 @@ button.onclick = function execute() {
             },
             shadow: true,
             smooth: true,
+        },
+        layout: {
+            randomSeed: undefined,
+            improvedLayout: true,
+            hierarchical: {
+                enabled: true,
+                levelSeparation: 150,
+                nodeSpacing: 200,
+                treeSpacing: 50,
+                blockShifting: true,
+                edgeMinimization: true,
+                parentCentralization: false,
+                direction: 'UD',        // UD, DU, LR, RL
+                sortMethod: 'hubsize'   // hubsize, directed
+            }
         }
     };
 
