@@ -100,7 +100,8 @@ button.onclick = function execute() {
                 direction: 'UD',        // UD, DU, LR, RL
                 sortMethod: 'hubsize'   // hubsize, directed
             }
-        }
+        },
+        physics: false
     };
 
 // initialize your network!
