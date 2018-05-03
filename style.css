@@ -3,3 +3,11 @@
     height: 97vh;
     border: 1px solid lightgray;
 }
+
+#webtitle{
+    color: white;
+    font-family: arial, serif;
+    font-size: xx-large;
+    background-color: navy;
+    text-align: center;
+}

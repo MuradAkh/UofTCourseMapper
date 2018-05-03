@@ -20,7 +20,9 @@ button.onclick = function execute() {
                 let code = course.code.substring(0, 6);
                 let temp = courseMap[code];
             if (temp == null) {
-                    courseMap[code] = {code: code, prereq: course.prerequisites.match(regexp)}
+                    courseMap[code] = {code: code, prereq_list: course.prerequisites.match(regexp),
+                        prerequisites: course.prerequisites, exclusions: course.exclusions, name: course.name,
+                        description: course.description}
                 }
             }
         )
@@ -34,8 +36,8 @@ button.onclick = function execute() {
     Object.keys(courseMap).forEach(function(key) {
         let val = courseMap[key];
         allNodes.push({id: val.code , label: val.code, onclick: displayInfo()});
-        if(val.prereq != null) {
-            val.prereq.forEach(function (element) {
+        if(val.prereq_list != null) {
+            val.prereq_list.forEach(function (element) {
                 allEdges.push({to: val.code, from: element})
             })
         }
@@ -96,25 +98,32 @@ button.onclick = function execute() {
                 treeSpacing: 50,
                 blockShifting: true,
                 edgeMinimization: true,
-                parentCentralization: false,
+                parentCentralization: true,
                 direction: 'UD',        // UD, DU, LR, RL
                 sortMethod: 'hubsize'   // hubsize, directed
             }
         },
         physics: false,
-        interaction: {
-            selectNode: displayInfo
-        }
     };
 
 // initialize your network!
     let network = new vis.Network(container, data, options);
-    network.redraw();
 
-    function displayInfo(element) {
-        console.log(element);
+    function displayInfo(course) {
+        if(course == null){return}
+        document.getElementById('title').innerHTML = course.name;
+        document.getElementById('prerequisites').innerHTML = course.prerequisites;
+        document.getElementById('exclusions').innerHTML = course.exclusions;
+        document.getElementById('code').innerHTML = course.code;
+        document.getElementById('description').innerHTML = course.description;
+
 
     }
+
+    network.on("select", function (properties) {
+        displayInfo(courseMap[properties.nodes[0]])
+
+    })
 
 };
 
