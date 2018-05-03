@@ -15,6 +15,9 @@ button.onclick = function execute() {
 
     function addCourse(element) {
         let response = getInfo(element, 0).concat(getInfo(element, 100));
+        response = response.concat(getInfo(element, 200));
+        response = response.concat(getInfo(element, 300));
+        response = response.concat(getInfo(element, 400));
         let regexp = /[A-Z]{3}[0-9]{3}/gi ;
         response.forEach(function (course) {
                 let code = course.code.substring(0, 6);
@@ -31,19 +34,35 @@ button.onclick = function execute() {
     }
 
     let allNodes = [];
-    let allEdges =[];
+    let allEdges = [];
 
     Object.keys(courseMap).forEach(function(key) {
         let val = courseMap[key];
-        allNodes.push({id: val.code , label: val.code, onclick: displayInfo()});
+        let colour = getColour(val.code);
+        allNodes.push({id: val.code , label: val.code, color: colour});
         if(val.prereq_list != null) {
             val.prereq_list.forEach(function (element) {
-                allEdges.push({to: val.code, from: element})
+                if(val.code !== element){
+                    allEdges.push({to: val.code, from: element})
+                }
             })
         }
 
     });
 
+    function getColour(code){
+        let level = code.charAt(3);
+        switch (level){
+            case '1':
+                return '#d4f7c5';
+            case '2':
+                return '#f2f7c5';
+            case '3':
+                return '#f7e4c5';
+            case '4':
+                return'#cfc5f7';
+        }
+    }
 
     function getInfo(code, skip) {
         let res = "error";
@@ -51,8 +70,7 @@ button.onclick = function execute() {
 
         xmlhttp.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
-                let myArr = JSON.parse(this.responseText);
-                res = myArr;
+                res = JSON.parse(this.responseText);
             }
         };
         xmlhttp.open("GET", 'https://cors.io/?https://cobalt.qas.im/api/1.0/courses/filter?q=code:%22' + code + '%22&key=bolBkU4DDtKmXbbr4j5b0m814s3RCcBm&limit=100&campus:"UTSG"&skip=' + skip, false);
@@ -61,12 +79,7 @@ button.onclick = function execute() {
         return res;
     }
 
-
-
-
     let nodes = new vis.DataSet(allNodes);
-
-
     let edges = new vis.DataSet(allEdges);
 
 // create a network
@@ -98,8 +111,8 @@ button.onclick = function execute() {
                 treeSpacing: 50,
                 blockShifting: true,
                 edgeMinimization: true,
-                parentCentralization: true,
-                direction: 'UD',        // UD, DU, LR, RL
+                parentCentralization: false,
+                direction: 'LR',        // UD, DU, LR, RL
                 sortMethod: 'hubsize'   // hubsize, directed
             }
         },
