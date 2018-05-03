@@ -33,7 +33,7 @@ button.onclick = function execute() {
 
     Object.keys(courseMap).forEach(function(key) {
         let val = courseMap[key];
-        allNodes.push({id: val.code , label: val.code});
+        allNodes.push({id: val.code , label: val.code, onclick: displayInfo()});
         if(val.prereq != null) {
             val.prereq.forEach(function (element) {
                 allEdges.push({to: val.code, from: element})
@@ -101,14 +101,22 @@ button.onclick = function execute() {
                 sortMethod: 'hubsize'   // hubsize, directed
             }
         },
-        physics: false
+        physics: false,
+        interaction: {
+            selectNode: displayInfo
+        }
     };
 
 // initialize your network!
     let network = new vis.Network(container, data, options);
     network.redraw();
 
-}
+    function displayInfo(element) {
+        console.log(element);
+
+    }
+
+};
 
 
 
