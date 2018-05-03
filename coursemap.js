@@ -16,8 +16,6 @@ button.onclick = function execute() {
     function addCourse(element) {
         let response = getInfo(element, 0).concat(getInfo(element, 100));
         response = response.concat(getInfo(element, 200));
-        response = response.concat(getInfo(element, 300));
-        response = response.concat(getInfo(element, 400));
         let regexp = /[A-Z]{3}[0-9]{3}/gi ;
         response.forEach(function (course) {
                 let code = course.code.substring(0, 6);
@@ -73,7 +71,7 @@ button.onclick = function execute() {
                 res = JSON.parse(this.responseText);
             }
         };
-        xmlhttp.open("GET", 'https://cors.io/?https://cobalt.qas.im/api/1.0/courses/filter?q=code:%22' + code + '%22&key=bolBkU4DDtKmXbbr4j5b0m814s3RCcBm&limit=100&campus:"UTSG"&skip=' + skip, false);
+        xmlhttp.open("GET", 'https://cors.io/?https://cobalt.qas.im/api/1.0/courses/filter?q=code:"' + code + '" AND campus:"UTSG"&key=bolBkU4DDtKmXbbr4j5b0m814s3RCcBm&limit=100&skip=' + skip, false);
         xmlhttp.send();
 
         return res;
