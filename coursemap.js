@@ -1,7 +1,15 @@
 
 
 let button = document.getElementById('run');
-button.onclick = function execute() {
+button.onclick = execute;
+
+document.getElementById('courses').addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+        document.getElementById('run').click();
+    }
+});
+
+function execute() {
     let input = document.getElementById('courses').value;
     input = input.replace(/\s/g, '');
     console.log(input);
